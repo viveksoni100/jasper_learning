@@ -20,4 +20,11 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>net.sf.jasperreports.nature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>FirstReport_1.jrxml</name>
+			<type>1</type>
+			<location>/home/viveksoni100/GIT_REPO/jasper_learning/UdemyCourse/src/main/resources/FirstReport.jrxml</location>
+		</link>
+	</linkedResources>
 </projectDescription>
