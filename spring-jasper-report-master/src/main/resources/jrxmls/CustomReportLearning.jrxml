@@ -35,12 +35,20 @@
 		</queryString>
 		<field name="subjectName" class="java.lang.String"/>
 		<field name="marksObtained" class="java.lang.Long"/>
+		<sortField name="subjectName" order="Descending"/>
+		<variable name="sum" class="java.lang.Long" calculation="Sum">
+			<variableExpression><![CDATA[$F{marksObtained}]]></variableExpression>
+		</variable>
 	</subDataset>
 	<parameter name="tableData" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
 	<parameter name="studentName" class="java.lang.String"/>
+	<parameter name="subReport" class="net.sf.jasperreports.engine.JasperReport"/>
+	<parameter name="subDataSource" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
+	<field name="marksObtained" class="java.lang.Long"/>
+	<field name="subjectName" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -79,9 +87,10 @@
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="233" splitType="Stretch">
+		<band height="170" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<componentElement>
-				<reportElement x="0" y="0" width="555" height="233" uuid="9eb8e005-8300-4406-904f-0eacf4539f7c">
+				<reportElement x="0" y="0" width="555" height="170" uuid="9eb8e005-8300-4406-904f-0eacf4539f7c">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
@@ -114,7 +123,12 @@
 					<jr:column width="100" uuid="fe9741c3-9990-4f73-9635-22723f94299f">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
 						<jr:tableHeader style="Table_TH" height="30" rowSpan="1"/>
-						<jr:tableFooter style="Table_TH" height="30" rowSpan="1"/>
+						<jr:tableFooter style="Table_TH" height="30" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="100" height="30" uuid="b5da98f8-7608-4df9-afb2-8f9dbd2fe394"/>
+								<textFieldExpression><![CDATA[$V{sum}]]></textFieldExpression>
+							</textField>
+						</jr:tableFooter>
 						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="100" height="30" uuid="21dd613b-554c-4227-9acf-25a08e665e54"/>
@@ -148,6 +162,31 @@
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="42" splitType="Stretch"/>
+		<band height="448" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<pieChart>
+				<chart evaluationTime="Report">
+					<reportElement x="56" y="30" width="200" height="200" uuid="0981502e-cbb3-4163-ba00-daf3bd02abd6"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<pieDataset>
+					<dataset resetType="Report"/>
+					<keyExpression><![CDATA[$F{subjectName}]]></keyExpression>
+					<valueExpression><![CDATA[$F{marksObtained}]]></valueExpression>
+					<labelExpression><![CDATA[""+$F{marksObtained}]]></labelExpression>
+				</pieDataset>
+				<piePlot>
+					<plot/>
+					<itemLabel/>
+				</piePlot>
+			</pieChart>
+			<subreport>
+				<reportElement x="0" y="240" width="555" height="200" uuid="bba495c2-6554-4378-8ab0-00a793c38ff6"/>
+				<dataSourceExpression><![CDATA[$P{subDataSource}]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subReport}]]></subreportExpression>
+			</subreport>
+		</band>
 	</summary>
 </jasperReport>

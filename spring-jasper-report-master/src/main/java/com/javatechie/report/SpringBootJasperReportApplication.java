@@ -44,6 +44,11 @@ public class SpringBootJasperReportApplication {
         return service.exportCustomReport(format);
     }
 
+    @GetMapping("/reportSubReport/{format}")
+    public String generateSubReport(@PathVariable String format) throws Exception {
+        return service.subReport(format);
+    }
+
     public static void main(String[] args) {
         SpringApplication.run(SpringBootJasperReportApplication.class, args);
     }

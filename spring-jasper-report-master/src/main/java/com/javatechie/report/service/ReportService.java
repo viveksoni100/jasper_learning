@@ -44,6 +44,38 @@ public class ReportService {
         return "report generated in path : " + path;
     }
 
+    public String subReport(String format) throws Exception {
+
+        final String DESTINATION_PATH = "/home/viveksoni100/Downloads/";
+        final String JRXML_FILE_NAME = "subReportLearning";
+        List<Subject> subjects = getSubjectInformation();
+        final String FILE_NAME = "SubReport";
+        final String SUB_JRXML_FILE_NAME = "emp_execute";
+        List<Employee> employees = getAllEmployees();
+
+        JasperReport compiledSubReport = loadJRXMLFileAndCompileIt(SUB_JRXML_FILE_NAME);
+        JRBeanCollectionDataSource subDataSource = mapEmployeeDataToReport(employees);
+
+        JasperReport jasperReport = loadJRXMLFileAndCompileIt(JRXML_FILE_NAME);
+        JRBeanCollectionDataSource dataSource = mapSubjectReportToReport(subjects);
+        JRBeanCollectionDataSource chartDataSource = dataSource;
+        Map<String, Object> parameters = getTheParamersToBePassedForSubReort(dataSource, compiledSubReport, subDataSource);
+        fillTheParameters(parameters);
+        JasperPrint jasperPrint = fillReport(jasperReport, parameters, chartDataSource);
+        exportTheReport(jasperPrint, DESTINATION_PATH, format, FILE_NAME);
+
+        return "Export is done at : " + DESTINATION_PATH;
+    }
+
+    private Map<String, Object> getTheParamersToBePassedForSubReort(JRBeanCollectionDataSource dataSource, JasperReport compiledSubReport, JRBeanCollectionDataSource subDataSource) {
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("studentName", "Vivek Soni");
+        parameters.put("tableData", dataSource);
+        parameters.put("subReport", compiledSubReport);
+        parameters.put("subDataSource", subDataSource);
+        return parameters;
+    }
+
     public String exportCustomReport(String format) throws Exception {
 
         final String DESTINATION_PATH = "/home/viveksoni100/Downloads/";
@@ -53,9 +85,10 @@ public class ReportService {
 
         JasperReport jasperReport = loadJRXMLFileAndCompileIt(JRXML_FILE_NAME);
         JRBeanCollectionDataSource dataSource = mapSubjectReportToReport(subjects);
+        JRBeanCollectionDataSource chartDataSource = dataSource;
         Map<String, Object> parameters = getTheParamersToBePassedForSubject(dataSource);
         fillTheParameters(parameters);
-        JasperPrint jasperPrint = fillReport(jasperReport, parameters, null);
+        JasperPrint jasperPrint = fillReport(jasperReport, parameters, chartDataSource);
         exportTheReport(jasperPrint, DESTINATION_PATH, format, FILE_NAME);
 
         return "Export is done at : " + DESTINATION_PATH;
@@ -80,6 +113,7 @@ public class ReportService {
 
         subjectList.add(new Subject("Java", 80));
         subjectList.add(new Subject("Mongo", 100));
+        subjectList.add(new Subject("PHP", 80));
 
         return subjectList;
     }
