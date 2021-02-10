@@ -39,6 +39,11 @@ public class SpringBootJasperReportApplication {
         return service.export(format);
     }
 
+    @GetMapping("/reportNewCustom/{format}")
+    public String generateReportNewCustom(@PathVariable String format) throws Exception {
+        return service.exportCustomReport(format);
+    }
+
     public static void main(String[] args) {
         SpringApplication.run(SpringBootJasperReportApplication.class, args);
     }
